@@ -22,23 +22,23 @@ def progress(size):
         sys.stdout.write(str((float(i)/size)*100)+'%')
         sys.stdout.flush()
 
-print '服务器正在侦听：%s %s' %(ip,port)
+print u'服务器正在侦听：%s %s' %(ip,port)
 print '============================================'
 class mysock(SocketServer.BaseRequestHandler):
     def handle(self):
-        print '客户端连接来自：',self.client_address
+        print u'客户端连接来自：',self.client_address
         while True:
             data = self.request.recv(1024)
             if not data:
-                print '没有数据，终止当前这个连接！'
+                print u'没有数据，终止当前这个连接！'
                 break
             option,filename,size = data.split(',')
             print data
 #            size1 = float(size) / 1024 # 转换单位
             if option == 'put':
                 if int(size) != 0:
-                    print  '传输文件大小为 %s' %size
-                    print '文件传输中 ...'
+                    print  u'传输文件大小为 %s' %size
+                    print u'文件传输中 ...'
                     f = open('public/%s' %filename,'rw')
                     recv_all(self.request,int(size),f)
                     progress(size)
@@ -48,7 +48,7 @@ class mysock(SocketServer.BaseRequestHandler):
                     print '[OK.]'
                 else:
                     self.request.send('shutdown')
-                    print '没有数据！',self.client_address
+                    print u'没有数据！',self.client_address
                     break
 if __name__ == '__main__':
     s = SocketServer.ThreadingTCPServer((ip, port), mysock)
